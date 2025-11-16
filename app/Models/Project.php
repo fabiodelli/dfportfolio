@@ -12,9 +12,13 @@ class Project extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'content', 'cover_image','full_image', 'git', 'slug'];
+    protected $fillable = ['title', 'content', 'cover_image', 'full_image', 'git', 'slug'];
 
-    public function technologies():BelongsToMany
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
+    public function technologies(): BelongsToMany
     {
         return $this->belongsToMany(Technology::class);
     }
@@ -22,9 +26,8 @@ class Project extends Model
     {
         return Str::slug($title, '-');
     }
-    public function type():BelongsTo
+    public function type(): BelongsTo
     {
         return $this->belongsTo(Type::class);
     }
-
 }

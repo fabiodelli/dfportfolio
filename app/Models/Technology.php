@@ -2,23 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use illuminate\support\Str;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Str;
 
 class Technology extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name','logo'];
+    // aggiungi qui i campi che hai nella migration
+    protected $fillable = ['name', 'slug', 'logo'];
 
-    public function projects():BelongsToMany
+    public function projects(): BelongsToMany
     {
         return $this->belongsToMany(Project::class);
     }
-    public static function generateSlug($title)
+
+    public static function generateSlug($name)
     {
-        return Str::slug($title, '-');
+        return Str::slug($name, '-');
     }
 }

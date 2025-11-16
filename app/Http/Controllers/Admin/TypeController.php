@@ -25,6 +25,9 @@ class TypeController extends Controller
             'type' => 'required|string|max:255|unique:types,type',
         ]);
 
+        // 👇 QUI aggiungiamo lo slug
+        $data['slug'] = Type::generateSlug($data['type']);
+
         Type::create($data);
 
         return redirect()->route('admin.types.index')
@@ -41,6 +44,9 @@ class TypeController extends Controller
         $data = $request->validate([
             'type' => 'required|string|max:255|unique:types,type,' . $type->id,
         ]);
+
+        // 👇 aggiorniamo anche lo slug se cambia il nome
+        $data['slug'] = Type::generateSlug($data['type']);
 
         $type->update($data);
 

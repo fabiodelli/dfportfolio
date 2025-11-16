@@ -14,11 +14,12 @@ return new class extends Migration
     public function up()
     {
         Schema::create('technologies', function (Blueprint $table) {
-            $table->id();
-            $table->string('name','150')->unique();
-            $table->string('logo','200');
-            $table->timestamps();
-        });
+    $table->id();
+    $table->string('name');
+    $table->string('slug');           // meglio se poi lo metti unique()
+    $table->string('image')->nullable(); // opzionale per il logo
+    $table->timestamps();
+});
     }
 
     /**

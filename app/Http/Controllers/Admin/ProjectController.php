@@ -18,36 +18,39 @@ class ProjectController extends Controller
         return view('admin.projects.index', compact('projects'));
     }
 
-
     public function create()
     {
         $technologies = Technology::all();
         $selectedTechnologies = [];
+
         $types = Type::all();
         $selectedTypes = [];
 
-        return view('admin.projects.create', compact('technologies', 'selectedTechnologies', 'types', 'selectedTypes'));
+        return view('admin.projects.create', compact(
+            'technologies',
+            'selectedTechnologies',
+            'types',
+            'selectedTypes'
+        ));
     }
 
-
-
-    public function store(StoreProjectRequest $request, Project $projects)
+    public function store(StoreProjectRequest $request)
     {
-
         $val_data = $request->validated();
 
         $slug = Project::generateSlug($val_data['title']);
-
         $val_data['slug'] = $slug;
 
+        // crea il progetto
         $project = Project::create($val_data);
 
+        // TECHNOLOGIES (pivot)
         $technologies = $request->input('technologies', []);
-
         if (!empty($technologies)) {
             $project->technologies()->attach($technologies);
         }
 
+        // TYPE (belongsTo)
         $typeId = $request->input('type_id');
         if ($typeId) {
             $type = Type::find($typeId);
@@ -57,64 +60,82 @@ class ProjectController extends Controller
             }
         }
 
-        return to_route('admin.projects.index')->with('message', 'Project Created Successfully');
+        return to_route('admin.projects.index')
+            ->with('message', 'Project created successfully');
     }
 
-
-    public function show(Project $projects)
+    public function show(Project $project)
     {
-        $types = $projects->type;
+        $types = $project->type;               // single type (belongsTo)
+        $technologies = $project->technologies;
 
-        $technologies = $projects->technologies;
-        return view('admin.projects.show', compact('projects', 'technologies', 'types'));
+        return view('admin.projects.show', compact(
+            'project',
+            'technologies',
+            'types'
+        ));
     }
 
-
-    public function edit(Project $projects)
+    public function edit(Project $project)
     {
         $technologies = Technology::all();
-        $selectedTechnologies = $projects->technologies()->pluck('id')->toArray();
-        $types = Type::all();
-        $selectedTypes = $projects->type()->pluck('id')->toArray();
+        $selectedTechnologies = $project->technologies()->pluck('id')->toArray();
 
-        return view('admin.projects.edit', compact('projects', 'types','selectedTypes', 'technologies', 'selectedTechnologies'));
+        $types = Type::all();
+        // se il progetto ha un type, prendo il suo id, altrimenti array vuoto
+        $selectedTypes = $project->type ? [$project->type->id] : [];
+
+        return view('admin.projects.edit', compact(
+            'project',
+            'types',
+            'selectedTypes',
+            'technologies',
+            'selectedTechnologies'
+        ));
     }
 
-    public function update(UpdateProjectRequest $request, Project $projects)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
         $val_data = $request->validated();
 
         $slug = Project::generateSlug($val_data['title']);
-
         $val_data['slug'] = $slug;
 
-        $projects->update($val_data);
+        // aggiorna campi base
+        $project->update($val_data);
 
+        // TECHNOLOGIES (pivot sync)
         $technologies = $request->input('technologies', []);
+        $project->technologies()->sync($technologies);
 
-        $projects->technologies()->sync($technologies);
-
+        // TYPE (belongsTo)
         $typeId = $request->input('type_id');
         if ($typeId) {
             $type = Type::find($typeId);
             if ($type) {
-                $projects->type()->associate($type);
-                $projects->save();
+                $project->type()->associate($type);
+                $project->save();
             }
         } else {
-            $projects->type()->dissociate();
-            $projects->save();
+            // se deselezioni il type
+            $project->type()->dissociate();
+            $project->save();
         }
 
-
-        return to_route('admin.projects.index')->with('message', 'Project: ' . $projects->title . 'Updated');
+        return to_route('admin.projects.index')
+            ->with('message', 'Project: ' . $project->title . ' updated');
     }
 
-
-    public function destroy(Project $projects)
+    public function destroy(Project $project)
     {
+        $title = $project->title;
 
-        $projects->delete();
-        return to_route('admin.projects.index')->with('message', 'project:' . $projects->title . 'Deleted');
+        // stacco le tecnologie prima di cancellare (opzionale ma pulito)
+        $project->technologies()->detach();
+
+        $project->delete();
+
+        return to_route('admin.projects.index')
+            ->with('message', 'Project: ' . $title . ' deleted');
     }
 }
