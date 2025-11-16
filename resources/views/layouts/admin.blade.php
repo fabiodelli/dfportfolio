@@ -53,17 +53,21 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link " href="#">
+                                <a class="nav-link {{ str_starts_with(Route::currentRouteName(), 'admin.technologies.') ? 'bg-dark' : '' }}"
+                                    href="{{ route('admin.technologies.index') }}">
                                     <i class="fa-solid fa-bookmark"></i>
-                                    Technologies
+                                    {{__('Technologies')}}
                                 </a>
                             </li>
+
                             <li class="nav-item">
-                                <a class="nav-link " href="#">
+                                <a class="nav-link {{ str_starts_with(Route::currentRouteName(), 'admin.types.') ? 'bg-dark' : '' }}"
+                                    href="{{ route('admin.types.index') }}">
                                     <i class="fa-solid fa-tags"></i>
-                                    Type
+                                    Types
                                 </a>
                             </li>
+
 
                         </ul>
                     </div>

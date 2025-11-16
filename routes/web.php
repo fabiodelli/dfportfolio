@@ -6,6 +6,9 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Mail\NewLead;
 use App\Models\Lead;
+use App\Http\Controllers\Admin\TypeController;
+use App\Http\Controllers\Admin\TechnologyController;
+
 
 
 
@@ -37,10 +40,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-Route::middleware(['auth','verified'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
-    // qui dovrebbe essere project e non projects
-    Route::resource('projects', ProjectController::class)->parameters(['projects' => 'projects:slug']);
-});
+// Dashboard VECCHIA fuori dal gruppo: ELIMINIAMOLA
+// Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
 
-require __DIR__.'/auth.php';
+// Rotte protette admin
+Route::middleware(['auth', 'verified'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+
+        // dashboard: URL = /admin , nome = admin.dashboard
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // PROGETTI (come già avevi, ma senza /admin doppio)
+        Route::resource('projects', ProjectController::class);
+
+        // TECNOLOGIE
+        Route::resource('technologies', TechnologyController::class);
+
+        // TIPI
+        Route::resource('types', TypeController::class);
+    });
+
+
+require __DIR__ . '/auth.php';
