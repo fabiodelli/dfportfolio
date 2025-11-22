@@ -32,12 +32,9 @@ class TechnologyController extends Controller
     // slug dal nome
     $data['slug'] = Technology::generateSlug($data['name']);
 
-    // 👇 QUI il fix: logo ha SEMPRE un valore
-    $data['logo'] = '';
-
-    // se più avanti vorrai usare davvero un file logo, cambieremo questa parte
+    // 👇 QUI il fix: image deve avere il path
     if ($request->hasFile('image')) {
-        $data['logo'] = $request->file('image')->store('technologies', 'public');
+        $data['image'] = $request->file('image')->store('technologies', 'public');
     }
 
     Technology::create($data);

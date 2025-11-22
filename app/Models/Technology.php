@@ -12,7 +12,7 @@ class Technology extends Model
     use HasFactory;
 
     // aggiungi qui i campi che hai nella migration
-    protected $fillable = ['name', 'slug', 'logo'];
+    protected $fillable = ['name', 'slug', 'image'];
 
     public function projects(): BelongsToMany
     {

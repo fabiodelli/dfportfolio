@@ -40,8 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Dashboard VECCHIA fuori dal gruppo: ELIMINIAMOLA
-// Route::get('/admin', [DashboardController::class, 'index'])->name('dashboard');
+
 
 // Rotte protette admin
 Route::middleware(['auth', 'verified'])
