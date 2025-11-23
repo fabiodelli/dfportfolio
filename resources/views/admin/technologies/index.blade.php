@@ -32,8 +32,13 @@
                             <tr>
                                 <td class="ps-4">
                                     @if($technology->image)
-                                        <img src="{{ asset('storage/' . $technology->image) }}" alt="{{ $technology->name }}" 
-                                             class="rounded" style="width: 40px; height: 40px; object-fit: contain;">
+                                        @if(str_starts_with($technology->image, 'http'))
+                                            <img src="{{ $technology->image }}" alt="{{ $technology->name }}" 
+                                                 class="rounded" style="width: 40px; height: 40px; object-fit: contain;">
+                                        @else
+                                            <img src="{{ asset('storage/' . $technology->image) }}" alt="{{ $technology->name }}" 
+                                                 class="rounded" style="width: 40px; height: 40px; object-fit: contain;">
+                                        @endif
                                     @else
                                         <div class="bg-light rounded d-flex align-items-center justify-content-center text-muted" 
                                              style="width: 40px; height: 40px;">
