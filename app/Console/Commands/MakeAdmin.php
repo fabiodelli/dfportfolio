@@ -14,7 +14,7 @@ class MakeAdmin extends Command
      *
      * @var string
      */
-    protected $signature = 'make:admin';
+    protected $signature = 'make:admin {--name=} {--email=} {--password=}';
 
     /**
      * The console command description.
@@ -35,9 +35,16 @@ class MakeAdmin extends Command
         $this->info('===========================================');
         $this->newLine();
 
-        // Ask for name
-        $name = $this->ask('Admin name');
-        if (empty($name)) {
+        // Get arguments or ask
+        $name = $this->option('name') ?: $this->ask('Admin name');
+        $email = $this->option('email') ?: $this->ask('Admin email');
+        $password = $this->option('password') ?: $this->secret('Admin password');
+        $passwordConfirmation = $this->option('password') ?: $this->secret('Confirm password');
+
+        if ($password !== $passwordConfirmation) {
+            $this->error('Passwords do not match!');
+            return 1;
+        }
             $this->error('Name is required!');
             return Command::FAILURE;
         }
