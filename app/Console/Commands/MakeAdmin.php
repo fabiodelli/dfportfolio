@@ -45,14 +45,12 @@ class MakeAdmin extends Command
             $this->error('Passwords do not match!');
             return 1;
         }
+        // Validate inputs
+        if (empty($name)) {
             $this->error('Name is required!');
             return Command::FAILURE;
         }
 
-        // Ask for email
-        $email = $this->ask('Admin email');
-        
-        // Validate email
         $validator = Validator::make(['email' => $email], [
             'email' => 'required|email|unique:users,email',
         ]);
@@ -62,19 +60,8 @@ class MakeAdmin extends Command
             return Command::FAILURE;
         }
 
-        // Ask for password (hidden)
-        $password = $this->secret('Admin password (min 8 characters)');
-        
         if (strlen($password) < 8) {
             $this->error('Password must be at least 8 characters!');
-            return Command::FAILURE;
-        }
-
-        // Confirm password
-        $passwordConfirmation = $this->secret('Confirm password');
-        
-        if ($password !== $passwordConfirmation) {
-            $this->error('Passwords do not match!');
             return Command::FAILURE;
         }
 
