@@ -55,6 +55,7 @@ class TechnologiesSeeder extends Seeder
         ];
 
         foreach ($technologies as $technology) {
+            $technology['slug'] = \Illuminate\Support\Str::slug($technology['name']);
             Technology::create($technology);
         }
     }
