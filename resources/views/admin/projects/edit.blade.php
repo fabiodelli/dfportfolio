@@ -60,6 +60,14 @@
                         @error('git') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
+                    <!-- Featured -->
+                    <div class="col-12">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" role="switch" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $project->is_featured) ? 'checked' : '' }}>
+                            <label class="form-check-label fw-bold" for="is_featured">In Evidenza (Featured)</label>
+                        </div>
+                    </div>
+
                     <!-- Technologies -->
                     <div class="col-12">
                         <label class="form-label fw-bold d-block mb-2">Technologies</label>

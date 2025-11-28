@@ -30,7 +30,8 @@ class StoreProjectRequest extends FormRequest
             'full_image'=>'max:200',
             'git'=>'max:200',
             'content'=>'max:1000',
-            'content_en'=>'nullable|max:1000'
+            'content_en'=>'nullable|max:1000',
+            'is_featured' => 'nullable|boolean'
         ];
     }
 }

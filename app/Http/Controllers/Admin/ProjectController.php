@@ -40,6 +40,7 @@ class ProjectController extends Controller
 
         $slug = Project::generateSlug($val_data['title']);
         $val_data['slug'] = $slug;
+        $val_data['is_featured'] = $request->has('is_featured');
 
         // crea il progetto
         $project = Project::create($val_data);
@@ -100,6 +101,7 @@ class ProjectController extends Controller
 
         $slug = Project::generateSlug($val_data['title']);
         $val_data['slug'] = $slug;
+        $val_data['is_featured'] = $request->has('is_featured');
 
         // aggiorna campi base
         $project->update($val_data);
