@@ -24,13 +24,20 @@
                     <label class="form-label fw-bold">Current Logo</label>
                     <div class="mb-2">
                         @if($technology->image)
-                            <img src="{{ asset('storage/' . $technology->image) }}" class="rounded border p-1" width="60">
+                            <div class="p-2 border rounded bg-light d-inline-block">
+                                {{-- Check if image starts with http (URL) or not (Storage path) --}}
+                                @if(Str::startsWith($technology->image, 'http'))
+                                    <img src="{{ $technology->image }}" class="rounded" width="60" alt="{{ $technology->name }}">
+                                @else
+                                    <img src="{{ asset('storage/' . $technology->image) }}" class="rounded" width="60" alt="{{ $technology->name }}">
+                                @endif
+                            </div>
                         @else
-                            <span class="text-muted fst-italic">No logo uploaded</span>
+                            <span class="text-muted fst-italic">No logo set</span>
                         @endif
                     </div>
-                    <label class="form-label fw-bold mt-2">Upload New Logo (Optional)</label>
-                    <input type="file" name="image" class="form-control">
+                    <label class="form-label fw-bold mt-2">Logo URL (Optional)</label>
+                    <input type="text" name="image" class="form-control" value="{{ old('image', $technology->image) }}" placeholder="https://example.com/logo.png">
                 </div>
 
                 <div class="text-end">

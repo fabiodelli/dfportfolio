@@ -40,15 +40,31 @@
                     <!-- Images -->
                     <div class="col-md-6">
                         <label for="cover_image" class="form-label fw-bold">Cover Image</label>
-                        <input type="text" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image"
-                            id="cover_image" placeholder="e.g. dashboard.png" value="{{ old('cover_image', $project->cover_image) }}">
+                        <input type="file" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image"
+                            id="cover_image">
+                        @if ($project->cover_image)
+                            <div class="mt-2">
+                                <small>Current Image:</small>
+                                <img src="{{ asset('storage/' . $project->cover_image) }}" alt="Cover Image" class="img-fluid rounded" style="max-height: 100px;">
+                            </div>
+                        @else
+                            <div class="mt-2 text-muted"><small>No image uploaded</small></div>
+                        @endif
                         @error('cover_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="col-md-6">
                         <label for="full_image" class="form-label fw-bold">Full Image</label>
-                        <input type="text" class="form-control @error('full_image') is-invalid @enderror" name="full_image"
-                            id="full_image" placeholder="e.g. dashboard-full.png" value="{{ old('full_image', $project->full_image) }}">
+                        <input type="file" class="form-control @error('full_image') is-invalid @enderror" name="full_image"
+                            id="full_image">
+                        @if ($project->full_image)
+                            <div class="mt-2">
+                                <small>Current Image:</small>
+                                <img src="{{ asset('storage/' . $project->full_image) }}" alt="Full Image" class="img-fluid rounded" style="max-height: 100px;">
+                            </div>
+                        @else
+                            <div class="mt-2 text-muted"><small>No image uploaded</small></div>
+                        @endif
                         @error('full_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 

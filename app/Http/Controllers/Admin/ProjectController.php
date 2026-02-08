@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Technology;
 use App\Models\Project;
 use App\Models\Type;
+use Illuminate\Support\Facades\Storage;
 
 class ProjectController extends Controller
 {
@@ -41,6 +42,14 @@ class ProjectController extends Controller
         $slug = Project::generateSlug($val_data['title']);
         $val_data['slug'] = $slug;
         $val_data['is_featured'] = $request->has('is_featured');
+
+        if ($request->hasFile('cover_image')) {
+            $val_data['cover_image'] = Storage::put('uploads', $request->cover_image);
+        }
+
+        if ($request->hasFile('full_image')) {
+            $val_data['full_image'] = Storage::put('uploads', $request->full_image);
+        }
 
         // crea il progetto
         $project = Project::create($val_data);
@@ -102,6 +111,20 @@ class ProjectController extends Controller
         $slug = Project::generateSlug($val_data['title']);
         $val_data['slug'] = $slug;
         $val_data['is_featured'] = $request->has('is_featured');
+
+        if ($request->hasFile('cover_image')) {
+            if ($project->cover_image) {
+                Storage::delete($project->cover_image); 
+            }
+            $val_data['cover_image'] = Storage::put('uploads', $request->cover_image);
+        }
+
+        if ($request->hasFile('full_image')) {
+            if ($project->full_image) {
+                Storage::delete($project->full_image);
+            }
+            $val_data['full_image'] = Storage::put('uploads', $request->full_image);
+        }
 
         // aggiorna campi base
         $project->update($val_data);

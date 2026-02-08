@@ -26,8 +26,8 @@ class StoreProjectRequest extends FormRequest
         return [
             'title'=>'required|max:150',
             'title_en'=>'nullable|max:150',
-            'cover_image'=>'max:200',
-            'full_image'=>'max:200',
+            'cover_image'=>'nullable|image|max:4096',
+            'full_image'=>'nullable|image|max:4096',
             'git'=>'max:200',
             'content'=>'max:1000',
             'content_en'=>'nullable|max:1000',

@@ -40,15 +40,15 @@
                     <!-- Images -->
                     <div class="col-md-6">
                         <label for="cover_image" class="form-label fw-bold">Cover Image</label>
-                        <input type="text" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image"
-                            id="cover_image" placeholder="e.g. dashboard.png" value="{{ old('cover_image') }}">
+                        <input type="file" class="form-control @error('cover_image') is-invalid @enderror" name="cover_image"
+                            id="cover_image" placeholder="e.g. dashboard.png">
                         @error('cover_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 
                     <div class="col-md-6">
                         <label for="full_image" class="form-label fw-bold">Full Image</label>
-                        <input type="text" class="form-control @error('full_image') is-invalid @enderror" name="full_image"
-                            id="full_image" placeholder="e.g. dashboard-full.png" value="{{ old('full_image') }}">
+                        <input type="file" class="form-control @error('full_image') is-invalid @enderror" name="full_image"
+                            id="full_image" placeholder="e.g. dashboard-full.png">
                         @error('full_image') <div class="invalid-feedback">{{ $message }}</div> @enderror
                     </div>
 

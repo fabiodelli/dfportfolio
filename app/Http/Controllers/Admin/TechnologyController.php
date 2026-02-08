@@ -22,27 +22,24 @@ class TechnologyController extends Controller
     }
 
     public function store(Request $request)
-{
-    $data = $request->validate([
-        'name'  => 'required|string|max:255|unique:technologies,name',
-        // se per ora non usi upload, puoi anche commentare questa riga:
-        'image' => 'nullable|image|max:2048',
-    ]);
+    {
+        $data = $request->validate([
+            'name'  => 'required|string|max:255|unique:technologies,name',
+            'image' => 'nullable|string|max:255', // Changed to string for URL
+        ]);
 
-    // slug dal nome
-    $data['slug'] = Technology::generateSlug($data['name']);
+        // slug dal nome
+        $data['slug'] = Technology::generateSlug($data['name']);
 
-    // 👇 QUI il fix: image deve avere il path
-    if ($request->hasFile('image')) {
-        $data['image'] = $request->file('image')->store('technologies', 'public');
+        // Image is now a simple string (URL) assignment
+        // $data['image'] is already in $data from validate if present
+
+        Technology::create($data);
+
+        return redirect()
+            ->route('admin.technologies.index')
+            ->with('success', 'Tecnologia creata');
     }
-
-    Technology::create($data);
-
-    return redirect()
-        ->route('admin.technologies.index')
-        ->with('success', 'Tecnologia creata');
-}
 
 
     public function edit(Technology $technology)
@@ -54,18 +51,14 @@ class TechnologyController extends Controller
     {
         $data = $request->validate([
             'name'  => 'required|string|max:255|unique:technologies,name,' . $technology->id,
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|string|max:255', // Changed to string for URL
         ]);
 
-        // 👇 aggiorna slug se cambia il nome
+        // aggiorna slug se cambia il nome
         $data['slug'] = Technology::generateSlug($data['name']);
 
-        if ($request->hasFile('image')) {
-            if ($technology->image) {
-                Storage::disk('public')->delete($technology->image);
-            }
-            $data['image'] = $request->file('image')->store('technologies', 'public');
-        }
+        // Image is updated automatically via $technology->update($data)
+        // No need to handle file storage or deletion
 
         $technology->update($data);
 
@@ -76,9 +69,9 @@ class TechnologyController extends Controller
 
     public function destroy(Technology $technology)
     {
-        if ($technology->image) {
-            Storage::disk('public')->delete($technology->image);
-        }
+        // No file to delete since we are using URLs
+        // If you were deleting local files before, you might want to keep that logic ONLY if it detects a local path,
+        // but for now we are switching to URLs as requested.
 
         $technology->delete();
 

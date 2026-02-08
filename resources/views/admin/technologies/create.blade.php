@@ -20,8 +20,8 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="form-label fw-bold">Logo (Optional)</label>
-                    <input type="file" name="image" class="form-control">
+                    <label class="form-label fw-bold">Logo URL (Optional)</label>
+                    <input type="text" name="image" class="form-control" placeholder="https://example.com/logo.png">
                 </div>
 
                 <div class="text-end">
